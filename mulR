@@ -52,7 +52,7 @@ theorem mulFn_unique
 -- ----------------------------------------
 
 def TakagiMulFn : Nat → Nat → Nat
-| a,     0     => 0
+| _,     0     => 0
 | a, x + 1 => TakagiMulFn a x + a
 
 -- ----------------------------------------
@@ -89,7 +89,7 @@ theorem TakagiMulFn_spec
 
     | succ a ih =>
 
-    simp [TakagiMulFn, ih, Nat.add_assoc, Nat.add_comm]
+    simp [TakagiMulFn, ih, Nat.add_assoc, Nat.add_left_comm, Nat.add_comm]
 
 -- ----------------------------------------
 -- ⑤ 掛算として定義
