@@ -1,0 +1,112 @@
+-- ========================================
+-- 高木貞治：数の概念：掛算の定義と証明：その２：左掛算版
+-- ========================================
+
+-- ----------------------------------------
+-- ① 条件だけを先に定義
+-- ----------------------------------------
+
+def IsMulFn (a : Nat) (f : Nat → Nat) : Prop :=
+  f 0 = 0 ∧
+  ∀ x, f (x + 1) = f x + a
+
+-- ----------------------------------------
+-- ② 一意性
+-- ----------------------------------------
+
+theorem mulFn_unique
+  (a : Nat)
+  (p q : Nat → Nat)
+  (hp : IsMulFn a p)
+  (hq : IsMulFn a q)
+  :
+  ∀ x, p x = q x := by
+
+  intro x
+
+  induction x with
+
+  | zero =>
+
+      rcases hp with ⟨hp0, hps⟩
+      rcases hq with ⟨hq0, hqs⟩
+
+      rw [hp0, hq0]
+
+  | succ x ih =>
+
+      rcases hp with ⟨hp0, hps⟩
+      rcases hq with ⟨hq0, hqs⟩
+
+      rw [hps]
+      rw [hqs]
+      rw [ih]
+
+-- ----------------------------------------
+-- ③ 存在
+--
+-- 高木貞治オリジナル：左掛算：
+--
+--   L₀(x)   = 0
+--   Lₐ₊₁(x) = Lₐ(x) + x
+-- ----------------------------------------
+
+def TakagiMulFn : Nat → Nat → Nat
+| 0,     _ => 0
+| a + 1, x => TakagiMulFn a x + x
+
+-- ----------------------------------------
+-- ④ 条件を満たすことの証明
+-- ----------------------------------------
+
+theorem TakagiMulFn_spec
+  (a : Nat)
+  :
+  IsMulFn a (TakagiMulFn a) := by
+
+  constructor
+
+  -- f_a(0) = 0
+  ·
+    induction a with
+
+    | zero =>
+        rfl
+
+    | succ a ih =>
+
+        simp [TakagiMulFn, ih]
+
+  -- f_a(x+1) = f_a(x) + a
+  ·
+    intro x
+
+    induction a with
+
+    | zero =>
+
+        simp [TakagiMulFn]
+
+    | succ a ih =>
+
+    simp [TakagiMulFn, ih,
+      Nat.add_assoc,
+      Nat.add_left_comm,
+      Nat.add_comm]
+
+-- ----------------------------------------
+-- ⑤ 掛算として定義
+-- ----------------------------------------
+
+def TakagiMul (x a : Nat) : Nat :=
+  TakagiMulFn a x
+
+-- ----------------------------------------
+-- 動作確認
+-- ----------------------------------------
+
+#eval TakagiMul 0 5
+#eval TakagiMul 1 5
+#eval TakagiMul 2 5
+#eval TakagiMul 3 5
+#eval TakagiMul 4 5
