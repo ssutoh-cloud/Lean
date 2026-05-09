@@ -89,10 +89,7 @@ theorem TakagiMulFn_spec
 
     | succ a ih =>
 
-    simp [TakagiMulFn, ih,
-      Nat.add_assoc,
-      Nat.add_left_comm,
-      Nat.add_comm]
+    simp [TakagiMulFn, ih, Nat.add_assoc, Nat.add_left_comm, Nat.add_comm]
 
 -- ----------------------------------------
 -- ⑤ 掛算として定義
